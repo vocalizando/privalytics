@@ -2,7 +2,7 @@
 
 ## Project status
 
-Right now, the project is not stable in any sense, thus there aren't any supported version at the moment
+Right now, the project is not stable in any sense, thus there aren't any supported versions at the moment
 
 <!--## Supported Versions
 
