@@ -1,7 +1,9 @@
 use bincode::{BorrowDecode, Decode, Encode};
+use serde_repr::{Deserialize_repr, Serialize_repr};
 use rocket::serde::{Deserialize, Serialize};
 
-#[derive(Encode, Decode, Serialize, Deserialize, PartialEq, Debug, Copy, Clone)]
+#[derive(Encode, Decode, PartialEq, Debug, Copy, Clone, Deserialize_repr, Serialize_repr)]
+#[repr(u8)]
 pub enum DeviceType {
     Null,
     Mobile,
@@ -10,7 +12,8 @@ pub enum DeviceType {
     Television,
 }
 
-#[derive(Encode, Decode, Serialize, Deserialize, PartialEq, Debug, Copy, Clone)]
+#[derive(Encode, Decode, PartialEq, Debug, Copy, Clone, Deserialize_repr, Serialize_repr)]
+#[repr(u8)]
 pub enum OSType {
     Null,
     Unix,
