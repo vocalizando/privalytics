@@ -3,21 +3,21 @@ use rocket::serde::{Deserialize, Serialize};
 
 #[derive(Encode, Decode, Serialize, Deserialize, PartialEq, Debug, Copy, Clone)]
 pub enum DeviceType {
-    NULL,
-    MOBILE,
-    TABLET,
-    DESKTOP,
-    TELEVISION,
+    Null,
+    Mobile,
+    Tablet,
+    Desktop,
+    Television,
 }
 
 #[derive(Encode, Decode, Serialize, Deserialize, PartialEq, Debug, Copy, Clone)]
 pub enum OSType {
-    NULL,
-    UNIX,
-    WINDOWS,
-    ANDROID,
-    MACOS,
-    IOS,
+    Null,
+    Unix,
+    Windows,
+    Android,
+    MacOs,
+    IOs,
 }
 
 /// Basic device data (device and OS)
