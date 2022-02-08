@@ -11,8 +11,8 @@ use rocket::{get, launch, put, routes, Build, Config, Rocket};
 use std::fs;
 use std::fs::OpenOptions;
 use std::io::Write;
-use std::rc::Rc;
-use std::sync::Arc;
+
+
 use std::time::{SystemTime, UNIX_EPOCH};
 use uuid::Uuid;
 
@@ -31,8 +31,8 @@ fn add_entry(data: Json<DbAnalyticsData>) {
         .unwrap()
         .as_millis();
 
-    clean_data.id = &uid.as_str();
-    clean_data.epoch = *&epoch as usize;
+    clean_data.id = uid.as_str();
+    clean_data.epoch = epoch as usize;
 
     println!(
         "{:?} {}",
