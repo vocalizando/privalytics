@@ -85,7 +85,7 @@ fn launch() -> Rocket<Build> {
             Box::pin(async move {
                 res.set_header(Header::new(
                     "Access-Control-Allow-Origin",
-                    get_cors_hostname(&args.cors_hostname, &args.cors_secure),
+                    get_cors_hostname(&args.cors_hostname, &args.cors_protocol),
                 ));
             })
         }))
@@ -98,7 +98,7 @@ fn launch() -> Rocket<Build> {
                     res.set_status(Status::NoContent);
                     res.set_header(Header::new(
                         "Access-Control-Allow-Origin",
-                        get_cors_hostname(&args.cors_hostname, &args.cors_secure),
+                        get_cors_hostname(&args.cors_hostname, &args.cors_protocol),
                     ));
                     res.set_header(Header::new(
                         "Access-Control-Allow-Methods",
@@ -122,14 +122,10 @@ struct Args {
     #[clap(long)]
     cors_hostname: String,
 
-    #[clap(long)]
-    cors_secure: bool,
+    #[clap(long, default_value = "https")]
+    cors_protocol: String,
 }
 
-fn get_cors_hostname(hostname: &String, secure: &bool) -> String {
-    if *secure {
-        format!("https://{}", hostname)
-    } else {
-        format!("http://{}", hostname)
-    }
+fn get_cors_hostname(hostname: &String, protocol: &String) -> String {
+    format!("{}{}", protocol, hostname)
 }
