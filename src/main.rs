@@ -1,4 +1,5 @@
 #![feature(slice_pattern)]
+#![allow(clippy::format_in_format_args)]
 
 use crate::analytics_def::DbAnalyticsData;
 use bincode::{decode_from_slice, encode_to_vec};
