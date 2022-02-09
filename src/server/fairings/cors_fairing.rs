@@ -1,7 +1,7 @@
 use rocket::fairing::{Fairing, Info, Kind};
-use rocket::{Build, Data, Orbit, Request, Response, Rocket};
-use rocket::http::{Header, Method, Status};
-use rocket::response::Body;
+use rocket::{Request, Response};
+use rocket::http::{Header};
+
 use crate::{get_args, get_cors_hostname};
 
 pub struct CorsFairing;

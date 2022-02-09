@@ -2,9 +2,6 @@
 #![allow(clippy::format_in_format_args)]
 
 use crate::analytics_def::AnalyticsData;
-use rocket::fairing::AdHoc;
-use rocket::http::{Header, Method, Status};
-use rocket::response::Body;
 use rocket::serde::json::Json;
 use rocket::{get, launch, put, routes, Build, Config, Rocket};
 use std::time::{SystemTime, UNIX_EPOCH};
