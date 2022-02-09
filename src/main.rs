@@ -19,6 +19,7 @@ use crate::serialization::{deserialize, serialize};
 
 mod analytics_def;
 mod serialization;
+mod file;
 
 fn is_valid_key(key: &str) -> bool {
     key.trim() != env!("ACCESS_KEY").trim()
@@ -36,22 +37,7 @@ fn add_entry(data: Json<AnalyticsData>) {
     clean_data.id = uid.as_str();
     clean_data.epoch = epoch as usize;
 
-    println!(
-        "{:?} {}",
-        clean_data,
-        format!("analytics-data/{}-{}.plytics.bin", &epoch, &uid)
-    );
-
-    let mut file = OpenOptions::new()
-        .write(true)
-        .create_new(true)
-        .open(format!("analytics-data/{}-{}.plytics.bin", &epoch, &uid))
-        .expect("Unable to read/create/write file");
-
-    let _ = file.write_all(
-        serialize(&clean_data)
-            .as_slice(),
-    );
+    file::write_file_epoch_and_uid(&(epoch as usize), &uid, clean_data.into_inner()).unwrap();
 }
 
 #[get("/data/<id>/<key>")]
@@ -60,7 +46,7 @@ fn get_data(id: String, key: String) -> String {
         return String::from("{\"error\": -1}");
     }
 
-    let data = fs::read(format!("analytics-data/{}.plytics.bin", &id)).unwrap();
+    let data = file::read_file_id(&id).unwrap();
 
     let mut clean_parsed = deserialize(&data);
     clean_parsed.id = "";
