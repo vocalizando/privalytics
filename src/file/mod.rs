@@ -12,11 +12,11 @@ fn generate_id_from_epoch_and_uid(epoch: &usize, uid: &String) -> String {
 }
 
 pub fn read_file_id(id: &String) -> Result<Vec<u8>, Error> {
-    Ok(fs::read(get_path_id(&id))?)
+    fs::read(get_path_id(id))
 }
 
 pub fn read_file_epoch_and_uid(epoch: &usize, uid: &String) -> Result<Vec<u8>, Error> {
-    Ok(fs::read(get_path_id(&generate_id_from_epoch_and_uid(epoch, uid)))?)
+    fs::read(get_path_id(&generate_id_from_epoch_and_uid(epoch, uid)))
 }
 
 pub fn write_file_epoch_and_uid(epoch: &usize, uid: &String, data: AnalyticsData) -> Result<(), Error> {

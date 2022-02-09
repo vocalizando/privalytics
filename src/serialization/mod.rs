@@ -9,9 +9,9 @@ pub fn serialize(data: &AnalyticsData) -> Vec<u8> {
         .unwrap()
 }
 
-pub fn deserialize(data: &Vec<u8>) -> AnalyticsData {
+pub fn deserialize(data: &[u8]) -> AnalyticsData {
     let (parsed, _): (AnalyticsData, usize) =
-        decode_from_slice(&data[..], BINCODE_CONFIGURATION).unwrap();
+        decode_from_slice(data, BINCODE_CONFIGURATION).unwrap();
 
     parsed
 }
