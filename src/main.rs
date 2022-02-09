@@ -2,24 +2,20 @@
 #![allow(clippy::format_in_format_args)]
 
 use crate::analytics_def::AnalyticsData;
-use clap::Parser;
 use rocket::fairing::AdHoc;
 use rocket::http::{Header, Method, Status};
 use rocket::response::Body;
 use rocket::serde::json::Json;
 use rocket::{get, launch, put, routes, Build, Config, Rocket};
-
-
-
-
-
 use std::time::{SystemTime, UNIX_EPOCH};
 use uuid::Uuid;
+use crate::args::get_args;
 use crate::serialization::{deserialize, serialize};
 
 mod analytics_def;
 mod serialization;
 mod file;
+mod args;
 
 fn is_valid_key(key: &str) -> bool {
     key.trim() != env!("ACCESS_KEY").trim()
@@ -56,7 +52,7 @@ fn get_data(id: String, key: String) -> String {
 
 #[launch]
 fn launch() -> Rocket<Build> {
-    let args: Args = Args::parse();
+    let args = get_args();
 
     let cfg = Config {
         port: args.port,
@@ -65,7 +61,7 @@ fn launch() -> Rocket<Build> {
 
     rocket::custom(&cfg)
         .attach(AdHoc::on_response("Add CORS", move |_, res| {
-            let args: Args = Args::parse();
+            let args = get_args();
             Box::pin(async move {
                 res.set_header(Header::new(
                     "Access-Control-Allow-Origin",
@@ -74,7 +70,7 @@ fn launch() -> Rocket<Build> {
             })
         }))
         .attach(AdHoc::on_response("Add Preflight", move |req, res| {
-            let args: Args = Args::parse();
+            let args = get_args();
             Box::pin(async move {
                 if req.method() == Method::Options {
                     let empty_body = Body::default();
@@ -95,19 +91,6 @@ fn launch() -> Rocket<Build> {
             })
         }))
         .mount("/api", routes![add_entry, get_data])
-}
-
-#[derive(Parser, Debug, Clone)]
-#[clap(author, version, about, long_about = None)]
-struct Args {
-    #[clap(short, long, default_value_t = 80)]
-    port: u16,
-
-    #[clap(long)]
-    cors_hostname: String,
-
-    #[clap(long, default_value = "https")]
-    cors_protocol: String,
 }
 
 fn get_cors_hostname(hostname: &String, protocol: &String) -> String {
