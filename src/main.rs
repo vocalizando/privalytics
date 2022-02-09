@@ -11,11 +11,13 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use uuid::Uuid;
 use crate::args::get_args;
 use crate::serialization::{deserialize, serialize};
+use crate::server::fairings;
 
 mod analytics_def;
 mod serialization;
 mod file;
 mod args;
+mod server;
 
 fn is_valid_key(key: &str) -> bool {
     key.trim() != env!("ACCESS_KEY").trim()
@@ -60,36 +62,8 @@ fn launch() -> Rocket<Build> {
     };
 
     rocket::custom(&cfg)
-        .attach(AdHoc::on_response("Add CORS", move |_, res| {
-            let args = get_args();
-            Box::pin(async move {
-                res.set_header(Header::new(
-                    "Access-Control-Allow-Origin",
-                    get_cors_hostname(&args.cors_hostname, &args.cors_protocol),
-                ));
-            })
-        }))
-        .attach(AdHoc::on_response("Add Preflight", move |req, res| {
-            let args = get_args();
-            Box::pin(async move {
-                if req.method() == Method::Options {
-                    let empty_body = Body::default();
-
-                    res.set_status(Status::NoContent);
-                    res.set_header(Header::new(
-                        "Access-Control-Allow-Origin",
-                        get_cors_hostname(&args.cors_hostname, &args.cors_protocol),
-                    ));
-                    res.set_header(Header::new(
-                        "Access-Control-Allow-Methods",
-                        "PUT, POST, GET, OPTIONS, DELETE",
-                    ));
-                    res.set_header(Header::new("Access-Control-Allow-Headers", "Content-Type"));
-                    res.set_header(Header::new("Access-Control-Max-Age", "86400"));
-                    res.set_streamed_body(empty_body);
-                }
-            })
-        }))
+        .attach(fairings::cors_fairing::CorsFairing)
+        .attach(fairings::preflight_fairing::PreflightFairing)
         .mount("/api", routes![add_entry, get_data])
 }
 
