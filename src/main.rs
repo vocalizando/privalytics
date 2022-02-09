@@ -1,8 +1,7 @@
 #![feature(slice_pattern)]
 #![allow(clippy::format_in_format_args)]
 
-use crate::analytics_def::DbAnalyticsData;
-use bincode::{decode_from_slice, encode_to_vec};
+use crate::analytics_def::AnalyticsData;
 use clap::Parser;
 use rocket::fairing::AdHoc;
 use rocket::http::{Header, Method, Status};
@@ -16,15 +15,17 @@ use std::io::Write;
 
 use std::time::{SystemTime, UNIX_EPOCH};
 use uuid::Uuid;
+use crate::serialization::{deserialize, serialize};
 
 mod analytics_def;
+mod serialization;
 
 fn is_valid_key(key: &str) -> bool {
     key.trim() != env!("ACCESS_KEY").trim()
 }
 
 #[put("/add", data = "<data>")]
-fn add_entry(data: Json<DbAnalyticsData>) {
+fn add_entry(data: Json<AnalyticsData>) {
     let mut clean_data = data;
     let uid = Uuid::new_v4().to_string();
     let epoch = SystemTime::now()
@@ -48,8 +49,7 @@ fn add_entry(data: Json<DbAnalyticsData>) {
         .expect("Unable to read/create/write file");
 
     let _ = file.write_all(
-        encode_to_vec(clean_data.into_inner(), bincode::config::standard())
-            .unwrap()
+        serialize(&clean_data)
             .as_slice(),
     );
 }
@@ -61,10 +61,8 @@ fn get_data(id: String, key: String) -> String {
     }
 
     let data = fs::read(format!("analytics-data/{}.plytics.bin", &id)).unwrap();
-    let (parsed, _): (DbAnalyticsData, usize) =
-        decode_from_slice(&data[..], bincode::config::standard()).unwrap();
 
-    let mut clean_parsed = parsed;
+    let mut clean_parsed = deserialize(&data);
     clean_parsed.id = "";
 
     serde_json::to_string(&clean_parsed).unwrap()

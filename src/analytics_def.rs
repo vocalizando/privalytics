@@ -45,7 +45,7 @@ pub struct WebVitals {
 }
 
 #[derive(Encode, BorrowDecode, Serialize, Deserialize, PartialEq, Debug, Copy, Clone)]
-pub struct DbAnalyticsData<'a> {
+pub struct AnalyticsData<'a> {
     pub id: &'a str,
     pub page: &'a str,
     pub epoch: usize,
