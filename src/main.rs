@@ -1,11 +1,8 @@
 #![feature(slice_pattern)]
 #![allow(clippy::format_in_format_args)]
 
+use rocket::{get, launch, routes, Build, Config, Rocket};
 use crate::analytics_def::AnalyticsData;
-use rocket::serde::json::Json;
-use rocket::{get, launch, put, routes, Build, Config, Rocket};
-use std::time::{SystemTime, UNIX_EPOCH};
-use uuid::Uuid;
 use crate::args::{get_args, get_env};
 use crate::serialization::{deserialize, serialize};
 use crate::server::{fairings, routes::api::{add_entry::add_entry}};
