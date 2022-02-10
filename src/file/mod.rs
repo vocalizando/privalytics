@@ -1,3 +1,6 @@
+#![allow(dead_code)]
+// Function `read_file_epoch_and_uid` isn't currently used, but will be in the near future
+
 use std::fs;
 use std::fs::OpenOptions;
 use std::io::{Error, Write};
