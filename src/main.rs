@@ -20,7 +20,7 @@ fn is_valid_key(key: &str) -> bool {
 #[get("/data/<id>/<key>")]
 fn get_data(id: String, key: String) -> String {
     if is_valid_key(&key) {
-        return String::from("{\"error\": -1}");
+        return server::errors::get_generic_error();
     }
 
     let data = file::read_file_id(&id).unwrap();
