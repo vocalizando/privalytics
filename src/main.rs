@@ -1,16 +1,16 @@
 #![feature(slice_pattern)]
 #![allow(clippy::format_in_format_args)]
 
-use rocket::{get, launch, routes, Build, Config, Rocket};
 use crate::analytics_def::AnalyticsData;
 use crate::args::{get_args, get_env};
 use crate::serialization::{deserialize, serialize};
-use crate::server::{fairings, routes::api::{add_entry::add_entry}};
+use crate::server::{fairings, routes::api::add_entry::add_entry};
+use rocket::{get, launch, routes, Build, Config, Rocket};
 
 mod analytics_def;
-mod serialization;
-mod file;
 mod args;
+mod file;
+mod serialization;
 mod server;
 
 fn is_valid_key(key: &str) -> bool {
@@ -45,10 +45,7 @@ fn launch() -> Rocket<Build> {
     rocket::custom(&cfg)
         .attach(fairings::cors_fairing::CorsFairing)
         .attach(fairings::preflight_fairing::PreflightFairing)
-        .mount("/api", routes![
-            add_entry,
-            get_data,
-        ])
+        .mount("/api", routes![add_entry, get_data,])
 }
 
 fn get_cors_hostname(hostname: &String, protocol: &String) -> String {

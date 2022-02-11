@@ -1,6 +1,6 @@
+use clap::Parser;
 use std::env;
 use std::env::VarError;
-use clap::Parser;
 
 #[derive(Parser, Debug, Clone)]
 #[clap(author, version, about, long_about = None)]
