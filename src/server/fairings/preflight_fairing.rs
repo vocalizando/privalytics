@@ -1,8 +1,8 @@
+use crate::{get_args, get_cors_hostname};
 use rocket::fairing::{Fairing, Info, Kind};
-use rocket::{Request, Response};
 use rocket::http::{Header, Method, Status};
 use rocket::response::Body;
-use crate::{get_args, get_cors_hostname};
+use rocket::{Request, Response};
 
 pub struct PreflightFairing;
 

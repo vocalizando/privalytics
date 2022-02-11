@@ -1,7 +1,7 @@
-use std::time::{SystemTime, UNIX_EPOCH};
+use crate::{file, AnalyticsData};
 use rocket::{put, serde::json::Json};
+use std::time::{SystemTime, UNIX_EPOCH};
 use uuid::Uuid;
-use crate::{AnalyticsData, file};
 
 #[put("/add", data = "<data>")]
 pub fn add_entry(data: Json<AnalyticsData>) -> Result<(), std::io::Error> {

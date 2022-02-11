@@ -1,6 +1,6 @@
 use bincode::{BorrowDecode, Decode, Encode};
-use serde_repr::{Deserialize_repr, Serialize_repr};
 use rocket::serde::{Deserialize, Serialize};
+use serde_repr::{Deserialize_repr, Serialize_repr};
 
 #[derive(Encode, Decode, PartialEq, Debug, Copy, Clone, Deserialize_repr, Serialize_repr)]
 #[repr(u8)]

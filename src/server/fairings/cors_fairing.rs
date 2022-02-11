@@ -1,6 +1,6 @@
 use rocket::fairing::{Fairing, Info, Kind};
+use rocket::http::Header;
 use rocket::{Request, Response};
-use rocket::http::{Header};
 
 use crate::{get_args, get_cors_hostname};
 
