@@ -43,7 +43,7 @@ pub enum Scope {
 }
 
 impl Scope {
-    pub fn is_valid(&self, scopes: &Vec<Scope>) -> bool {
+    pub fn is_valid(&self, scopes: &[Scope]) -> bool {
         let mut should_include: Vec<Scope> = vec![*self];
 
         // Ik, ik, this is spaghetti code 🍝 but I'm lazy, I'll refactor this tomorrow
