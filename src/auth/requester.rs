@@ -1,7 +1,10 @@
-use crate::auth::defs::responses::{LoginCode, LoginEndpointResponse, TokenClaims};
 use async_trait::async_trait;
 use jsonwebtoken::{DecodingKey, Validation};
 use serde::{Deserialize, Serialize};
+use crate::auth::defs::responses::intermediate::LoginEndpointIntermediateResponse;
+use crate::auth::defs::responses::login_error::LoginError;
+use crate::auth::defs::responses::server_responses::{LoginCode, TokenClaims};
+use crate::auth::defs::scope::Scope;
 
 pub struct Requester {
     endpoint: String,
@@ -42,55 +45,26 @@ impl RequesterTrait for Requester {
         let resp = intermediate_resp.to_final_response();
 
         match resp.code {
-            LoginCode::Ok => Ok(decode_jwt(identifier, password, &resp.jwt.unwrap())),
+            LoginCode::Ok => Ok(decode_jwt(identifier, password, &resp.jwt.unwrap()).unwrap()),
             _ => Err(LoginError::from_login_code(resp.code)),
         }
     }
 }
 
-fn decode_jwt(identifier: &str, password: &str, jwt: &String) -> TokenClaims {
-    println!("{}", &jwt);
-    jsonwebtoken::decode::<TokenClaims>(
+fn decode_jwt(identifier: &str, password: &str, jwt: &String) -> Result<TokenClaims, ()> {
+    let unchecked_claims: TokenClaims = jsonwebtoken::decode::<TokenClaims>(
         jwt.as_str(),
         &DecodingKey::from_secret(format!("{}{}", identifier, password).as_ref()),
         &Validation::default(),
     )
     .unwrap()
-    .claims
-}
+    .claims;
 
-#[derive(Debug, Serialize, Deserialize)]
-struct LoginEndpointIntermediateResponse {
-    pub code: i8,
-    pub jwt: Option<String>,
-}
-
-impl LoginEndpointIntermediateResponse {
-    fn to_final_response(&self) -> LoginEndpointResponse {
-        LoginEndpointResponse {
-            code: LoginCode::from(self.code),
-            jwt: self.jwt.to_owned(),
+    for scope in &unchecked_claims.scopes {
+        if !scope.is_valid(&unchecked_claims.scopes) {
+            return Err(());
         }
     }
-}
 
-#[derive(Debug)]
-pub struct LoginError {
-    code: LoginCode,
-}
-
-impl LoginError {
-    pub fn from_login_code(login_code: LoginCode) -> LoginError {
-        LoginError { code: login_code }
-    }
-}
-
-impl TryFrom<reqwest::Error> for LoginError {
-    type Error = LoginError;
-
-    fn try_from(_value: reqwest::Error) -> Result<Self, Self::Error> {
-        Ok(Self::Error {
-            code: LoginCode::ServerError,
-        })
-    }
+    Ok(unchecked_claims)
 }

@@ -1,11 +1,11 @@
-use crate::auth::defs::scopes::Scopes;
+use crate::auth::defs::scope::Scope;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TokenClaims {
     pub exp: usize,
     pub name: String,
-    pub scopes: Vec<Scopes>,
+    pub scopes: Vec<Scope>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

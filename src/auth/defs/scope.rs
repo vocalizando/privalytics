@@ -1,8 +1,8 @@
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
-#[derive(Debug, Serialize_repr, Deserialize_repr)]
+#[derive(Debug, PartialEq, Copy, Clone, Serialize_repr, Deserialize_repr)]
 #[repr(u8)]
-pub enum Scopes {
+pub enum Scope {
     /// This doesn't grant the user any access to any resource
     None = 0,
     /// This grants the user read access to all _non-sensitive_ resources
@@ -40,4 +40,39 @@ pub enum Scopes {
     ///
     /// Read, write, auditor and manager scope is required
     Admin = 5,
+}
+
+impl Scope {
+    pub fn is_valid(&self, scopes: &Vec<Scope>) -> bool {
+        let mut should_include: Vec<Scope> = vec![*self];
+
+        // Ik, ik, this is spaghetti code 🍝 but I'm lazy, I'll refactor this tomorrow
+        match self {
+            Scope::Write => should_include.push(Scope::Read),
+            Scope::Auditor => {
+                should_include.push(Scope::Read);
+                should_include.push(Scope::Write);
+            }
+            Scope::Manager => {
+                should_include.push(Scope::Read);
+                should_include.push(Scope::Write);
+                should_include.push(Scope::Auditor);
+            }
+            Scope::Admin => {
+                should_include.push(Scope::Read);
+                should_include.push(Scope::Write);
+                should_include.push(Scope::Auditor);
+                should_include.push(Scope::Manager);
+            }
+            _ => {}
+        };
+
+        let filtered_scopes: Vec<&Scope> = should_include.iter().filter(|item| !scopes.contains(item)).collect();
+
+        if filtered_scopes.iter().len() > 0 {
+            return false;
+        }
+
+        true
+    }
 }

@@ -18,7 +18,7 @@ user-defined endpoint that should do the following:
 
 #### EndpointResponse
 
-`LoginCode`: [auth/defs/responses](/src/auth/defs/responses.rs)
+`LoginCode`: [auth/defs/responses](/auth/defs/responses/responses.rs)
 
 ```json5
 {
@@ -31,7 +31,7 @@ user-defined endpoint that should do the following:
 
 `LoginJWT` is a JWT using an HMAC (no Base64) secret that's `"{identifier}{password}"`
 
-`Scopes`: [auth/defs/scopes](/src/auth/defs/scopes.rs)
+`Scopes`: [auth/defs/scopes](/src/auth/defs/scope)
 
 The claims of the decoded JWT should be the following:
 ```json5
