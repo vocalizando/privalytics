@@ -1,4 +1,5 @@
 #![feature(slice_pattern)]
+#![feature(in_band_lifetimes)]
 #![allow(clippy::format_in_format_args)]
 
 use crate::analytics_def::AnalyticsData;
@@ -6,9 +7,11 @@ use crate::args::{get_args, get_env};
 use crate::serialization::{deserialize, serialize};
 use crate::server::{fairings, routes::api::add_entry::add_entry};
 use rocket::{get, launch, routes, Build, Config, Rocket};
+use crate::server::guards::auth_guard::AuthData;
 
 mod analytics_def;
 mod args;
+mod auth;
 mod file;
 mod serialization;
 mod server;
@@ -18,7 +21,7 @@ fn is_valid_key(key: &str) -> bool {
 }
 
 #[get("/data/<id>/<key>")]
-fn get_data(id: String, key: String) -> String {
+fn get_data(user: AuthData, id: String, key: String) -> String {
     if is_valid_key(&key) {
         return server::errors::get_generic_error();
     }
