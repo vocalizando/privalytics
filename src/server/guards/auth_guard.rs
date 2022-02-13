@@ -1,8 +1,8 @@
-use rocket::request::{FromRequest, Outcome};
-use rocket::Request;
 use crate::auth::defs::responses::login_error::LoginError;
 use crate::auth::defs::responses::server_responses::TokenClaims;
 use crate::auth::requester::{Requester, RequesterTrait};
+use rocket::request::{FromRequest, Outcome};
+use rocket::Request;
 
 pub struct AuthData {
     pub data: TokenClaims,

@@ -67,7 +67,10 @@ impl Scope {
             _ => {}
         };
 
-        let filtered_scopes: Vec<&Scope> = should_include.iter().filter(|item| !scopes.contains(item)).collect();
+        let filtered_scopes: Vec<&Scope> = should_include
+            .iter()
+            .filter(|item| !scopes.contains(item))
+            .collect();
 
         if filtered_scopes.iter().len() > 0 {
             return false;

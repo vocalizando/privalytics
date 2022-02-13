@@ -1,10 +1,10 @@
-use async_trait::async_trait;
-use jsonwebtoken::{DecodingKey, Validation};
-use serde::{Deserialize, Serialize};
 use crate::auth::defs::responses::intermediate::LoginEndpointIntermediateResponse;
 use crate::auth::defs::responses::login_error::LoginError;
 use crate::auth::defs::responses::server_responses::{LoginCode, TokenClaims};
 use crate::auth::defs::scope::Scope;
+use async_trait::async_trait;
+use jsonwebtoken::{DecodingKey, Validation};
+use serde::{Deserialize, Serialize};
 
 pub struct Requester {
     endpoint: String,
