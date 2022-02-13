@@ -1,4 +1,3 @@
-use crate::auth::defs::responses::LoginCode::ServerError;
 use crate::auth::defs::responses::{LoginCode, LoginEndpointResponse, TokenClaims};
 use async_trait::async_trait;
 use jsonwebtoken::{DecodingKey, Validation};
@@ -52,7 +51,7 @@ impl RequesterTrait for Requester {
 fn decode_jwt(identifier: &str, password: &str, jwt: &String) -> TokenClaims {
     println!("{}", &jwt);
     jsonwebtoken::decode::<TokenClaims>(
-        &jwt.as_str(),
+        jwt.as_str(),
         &DecodingKey::from_secret(format!("{}{}", identifier, password).as_ref()),
         &Validation::default(),
     )
@@ -69,8 +68,8 @@ struct LoginEndpointIntermediateResponse {
 impl LoginEndpointIntermediateResponse {
     fn to_final_response(&self) -> LoginEndpointResponse {
         LoginEndpointResponse {
-            code: LoginCode::from(*&self.code),
-            jwt: (&self.jwt).to_owned(),
+            code: LoginCode::from(self.code),
+            jwt: self.jwt.to_owned(),
         }
     }
 }
@@ -89,7 +88,7 @@ impl LoginError {
 impl TryFrom<reqwest::Error> for LoginError {
     type Error = LoginError;
 
-    fn try_from(value: reqwest::Error) -> Result<Self, Self::Error> {
+    fn try_from(_value: reqwest::Error) -> Result<Self, Self::Error> {
         Ok(Self::Error {
             code: LoginCode::ServerError,
         })

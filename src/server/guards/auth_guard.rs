@@ -1,7 +1,5 @@
-use crate::auth::defs::responses::{LoginCode, TokenClaims};
-use crate::auth::requester;
+use crate::auth::defs::responses::{TokenClaims};
 use crate::auth::requester::{LoginError, Requester, RequesterTrait};
-use rocket::http::Status;
 use rocket::request::{FromRequest, Outcome};
 use rocket::Request;
 
