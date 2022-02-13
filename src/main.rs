@@ -5,9 +5,9 @@
 use crate::analytics_def::AnalyticsData;
 use crate::args::{get_args, get_env};
 use crate::serialization::{deserialize, serialize};
+use crate::server::guards::auth_guard::AuthData;
 use crate::server::{fairings, routes::api::add_entry::add_entry};
 use rocket::{get, launch, routes, Build, Config, Rocket};
-use crate::server::guards::auth_guard::AuthData;
 
 mod analytics_def;
 mod args;

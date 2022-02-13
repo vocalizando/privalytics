@@ -1,2 +1,2 @@
-pub(crate) mod scopes;
 pub(crate) mod responses;
+pub(crate) mod scopes;

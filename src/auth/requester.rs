@@ -1,8 +1,8 @@
+use crate::auth::defs::responses::LoginCode::ServerError;
+use crate::auth::defs::responses::{LoginCode, LoginEndpointResponse, TokenClaims};
 use async_trait::async_trait;
 use jsonwebtoken::{DecodingKey, Validation};
 use serde::{Deserialize, Serialize};
-use crate::auth::defs::responses::{LoginCode, LoginEndpointResponse, TokenClaims};
-use crate::auth::defs::responses::LoginCode::ServerError;
 
 pub struct Requester {
     endpoint: String,
@@ -37,15 +37,14 @@ impl RequesterTrait for Requester {
             .await
             .unwrap();
 
-        let intermediate_resp: LoginEndpointIntermediateResponse = serde_json::from_str::<LoginEndpointIntermediateResponse>(
-            resp_text.as_str()
-        ).unwrap();
+        let intermediate_resp: LoginEndpointIntermediateResponse =
+            serde_json::from_str::<LoginEndpointIntermediateResponse>(resp_text.as_str()).unwrap();
 
         let resp = intermediate_resp.to_final_response();
 
         match resp.code {
             LoginCode::Ok => Ok(decode_jwt(identifier, password, &resp.jwt.unwrap())),
-            _ => Err(LoginError::from_login_code(resp.code))
+            _ => Err(LoginError::from_login_code(resp.code)),
         }
     }
 }
@@ -56,7 +55,9 @@ fn decode_jwt(identifier: &str, password: &str, jwt: &String) -> TokenClaims {
         &jwt.as_str(),
         &DecodingKey::from_secret(format!("{}{}", identifier, password).as_ref()),
         &Validation::default(),
-    ).unwrap().claims
+    )
+    .unwrap()
+    .claims
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -81,9 +82,7 @@ pub struct LoginError {
 
 impl LoginError {
     pub fn from_login_code(login_code: LoginCode) -> LoginError {
-        LoginError {
-            code: login_code,
-        }
+        LoginError { code: login_code }
     }
 }
 
