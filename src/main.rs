@@ -22,7 +22,7 @@ fn is_valid_key(key: &str) -> bool {
 
 #[get("/data/<id>/<key>")]
 fn get_data(_user: AuthData, id: String, key: String) -> String {
-    if is_valid_key(&key) {
+    if !is_valid_key(&key) {
         return server::errors::get_generic_error();
     }
 
