@@ -51,5 +51,9 @@ fn launch() -> Rocket<Build> {
 }
 
 fn get_cors_hostname(hostname: &String, protocol: &String) -> String {
-    format!("{}://{}", protocol, hostname)
+    return if hostname == "*" {
+        hostname.clone()
+    } else {
+        format!("{}://{}", protocol, hostname)
+    }
 }
