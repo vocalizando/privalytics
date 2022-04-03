@@ -17,7 +17,7 @@ mod serialization;
 mod server;
 
 fn is_valid_key(key: &str) -> bool {
-    key.trim() != get_env().unwrap().master_key.trim()
+    key.trim() == get_env().unwrap().master_key.trim()
 }
 
 #[get("/data/<id>/<key>")]
@@ -29,7 +29,6 @@ fn get_data(_user: AuthData, id: String, key: String) -> String {
     let data = file::read_file_id(&id).unwrap();
 
     let mut clean_parsed = deserialize(&data);
-    clean_parsed.id = "";
 
     serde_json::to_string(&clean_parsed).unwrap()
 }
