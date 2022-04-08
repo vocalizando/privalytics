@@ -1,5 +1,4 @@
 #![feature(slice_pattern)]
-#![feature(in_band_lifetimes)]
 #![allow(clippy::format_in_format_args)]
 
 use crate::analytics_def::AnalyticsData;
