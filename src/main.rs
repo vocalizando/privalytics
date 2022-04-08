@@ -27,7 +27,7 @@ fn get_data(_user: AuthData, id: String, key: String) -> String {
 
     let data = file::read_file_id(&id).unwrap();
 
-    let mut clean_parsed = deserialize(&data);
+    let clean_parsed = deserialize(&data);
 
     serde_json::to_string(&clean_parsed).unwrap()
 }
