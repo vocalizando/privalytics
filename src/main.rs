@@ -1,11 +1,13 @@
-use crate::saving::{EntryLoad, EntrySave};
 use crate::structures::analytics::{Entry, Metadata};
+use crate::structures::config::Config;
 
-mod structures;
+mod config;
 mod saving;
+mod structures;
 
 fn main() {
     println!("Hello World!");
+
     let test = Entry {
         metadata: Metadata {
             date: 73812738921,
@@ -15,7 +17,8 @@ fn main() {
         },
         data: Default::default()
     };
-    println!("save - {:?}", test.save("./owo.bson").unwrap());
+    println!("save document - {:?}", test.save("./owo.bson").unwrap());
+    println!("load document - {:?}", Entry::load("./owo.bson").unwrap());
 
-    println!("load - {:?}", Entry::load("./owo.bson").unwrap());
+    println!("config - {:?}", Config::load("./config/Config.toml").unwrap());
 }

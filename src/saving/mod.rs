@@ -3,16 +3,8 @@ use std::fs;
 use std::path::Path;
 use crate::structures::analytics::Entry;
 
-pub trait EntrySave {
-    fn save<P: AsRef<Path> + ?Sized>(&self, path: &P) -> Result<(), Box<dyn Error>>;
-}
-
-pub trait EntryLoad {
-    fn load<P: AsRef<Path> + ?Sized>(path: &P) -> Result<Entry, Box<dyn Error>>;
-}
-
-impl EntrySave for Entry {
-    fn save<P: AsRef<Path> + ?Sized>(&self, path: &P) -> Result<(), Box<dyn Error>> {
+impl Entry {
+    pub fn save<P: AsRef<Path> + ?Sized>(&self, path: &P) -> Result<(), Box<dyn Error>> {
         let serialized = bson::to_bson(self)?;
         let document = serialized.as_document().unwrap();
 
@@ -23,10 +15,8 @@ impl EntrySave for Entry {
 
         Ok(())
     }
-}
 
-impl EntryLoad for Entry {
-    fn load<P: AsRef<Path> + ?Sized>(path: &P) -> Result<Entry, Box<dyn Error>> {
+    pub fn load<P: AsRef<Path> + ?Sized>(path: &P) -> Result<Entry, Box<dyn Error>> {
         let bytes = fs::read(path)?;
         let document = bson::Document::from_reader(&mut bytes.as_slice())?;
         let entry: Entry = bson::from_document(document)?;
