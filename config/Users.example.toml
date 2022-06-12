@@ -1,0 +1,9 @@
+[[users]]
+username = "admin"
+token = "example-token"
+scope = "Admin"
+
+[[users]]
+username = "random"
+token = "idk"
+scope = "Read"
