@@ -11,16 +11,13 @@ impl Users {
         Ok(value)
     }
 
-    pub fn get_userdata(&self, username: &str) -> Option<&UserData> {
+    pub fn get_userdata(&self, username: &str) -> Option<UserData> {
         let users = self.users.iter()
             .filter(|d| d.username == *username)
-            .map(|d| d.clone().to_owned())
-            .collect::<Vec<&UserData>>();
+            .map(|d| &(*d))
+            .map(|d| d.to_owned())
+            .collect::<Vec<UserData>>();
 
-        if let Some(v) = users.get(0) {
-            Some(*v)
-        } else {
-            None
-        }
+        users.get(0).cloned()
     }
 }
