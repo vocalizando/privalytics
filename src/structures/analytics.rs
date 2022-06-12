@@ -27,9 +27,9 @@ pub enum DataValues {
     Bool(bool),
 }
 
-impl Into<Bson> for DataValues {
-    fn into(self) -> Bson {
-        match self {
+impl From<DataValues> for Bson {
+    fn from(v: DataValues) -> Self {
+        match v {
             DataValues::String(v) => Bson::String(v),
             DataValues::Number(v) => Bson::Int32(i32::try_from(v.to_owned()).unwrap()),
             DataValues::Bool(v) => Bson::Boolean(v),
@@ -96,6 +96,7 @@ impl_from_for_data_values!(bool, Bool);
 
 #[cfg(test)]
 mod data_values_tests {
+    #[allow(clippy::bool_assert_comparison)]
     use super::*;
 
     #[test]
