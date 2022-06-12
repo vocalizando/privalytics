@@ -1,6 +1,5 @@
 use std::error::Error;
 use std::fs;
-use std::ops::Deref;
 use std::path::Path;
 use crate::structures::users::{UserData, Users};
 
@@ -14,7 +13,7 @@ impl Users {
 
     pub fn get_userdata(&self, username: &str) -> Option<&UserData> {
         let users = self.users.iter()
-            .filter(|d| d.username == username.to_string())
+            .filter(|d| d.username == *username)
             .map(|d| d.clone().to_owned())
             .collect::<Vec<&UserData>>();
 
