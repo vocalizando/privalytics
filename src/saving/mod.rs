@@ -1,8 +1,6 @@
 use std::error::Error;
 use std::fs;
-use std::fs::File;
 use std::path::Path;
-use bson::Bson::Document;
 use crate::structures::analytics::Entry;
 
 pub trait EntrySave {

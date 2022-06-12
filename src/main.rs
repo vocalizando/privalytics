@@ -1,4 +1,3 @@
-use bson::Bson::Document;
 use crate::saving::{EntryLoad, EntrySave};
 use crate::structures::analytics::{Entry, Metadata};
 

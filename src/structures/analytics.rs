@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 use std::fmt::Formatter;
-use bson::{Bson, DateTime};
+use bson::{Bson};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use serde::de::{EnumAccess, Error, MapAccess, SeqAccess, Visitor};
+use serde::de::{Error, Visitor};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Entry {
