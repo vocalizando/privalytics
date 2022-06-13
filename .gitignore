@@ -16,3 +16,4 @@ analytics-data/
 owo.bson
 config/Config.toml
 config/Users.toml
+data/*

@@ -1,7 +1,7 @@
 use std::error::Error;
 use std::fs;
 use std::path::Path;
-use crate::structures::analytics::Entry;
+use crate::structures::entry::Entry;
 
 impl Entry {
     pub fn save<P: AsRef<Path> + ?Sized>(&self, path: &P) -> Result<(), Box<dyn Error>> {
