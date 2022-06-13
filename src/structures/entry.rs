@@ -96,7 +96,7 @@ impl_from_for_data_values!(bool, Bool);
 
 #[cfg(test)]
 mod data_values_tests {
-    #[allow(clippy::bool_assert_comparison)]
+    #![allow(clippy::bool_assert_comparison)]
     use super::*;
 
     #[test]

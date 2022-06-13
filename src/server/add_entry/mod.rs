@@ -1,6 +1,3 @@
-use std::collections::hash_map::DefaultHasher;
-use std::error::Error;
-use std::hash::{Hash, Hasher};
 use std::mem::size_of_val;
 use std::time::SystemTime;
 use rocket::serde::json::Json;
@@ -22,7 +19,7 @@ pub struct RequestEntry {
     data: Data,
 }
 
-#[derive(Hash, Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct RequestMetadata {
     pub date: Option<u64>,
     pub duid: Option<String>,
@@ -59,13 +56,13 @@ pub fn add_entry(data: Json<RequestEntry>, headers_guard: HeadersGuard, _state: 
     // TODO: Implement server-side UID and page support
 
     let data = data;
-    let origin_header = headers.get_one("Origin").unwrap_or_else(|| "null");
+    let origin_header = headers.get_one("Origin").unwrap_or("null");
 
     if EMPTY_STR.contains(&origin_header) {
         return Err(String::from("Null Origin header"))
     }
     if VALID_PROTOCOLS.iter()
-        .filter(|v| *&origin_header.starts_with(*v))
+        .filter(|v| origin_header.starts_with(*v))
         .collect::<Vec<&&str>>()
         .is_empty() {
         return Err(String::from("Invalid protocol"))
@@ -95,6 +92,6 @@ fn entry_random_uid(data: &RequestEntry) -> String {
         .as_secs();
 
     // 769 doesn't have any special meaning here, it could be any number
-    let result = u128::try_from(size).unwrap_or_else(|_| 769) * u128::from(date);
+    let result = u128::try_from(size).unwrap_or(769) * u128::from(date);
     format!("{}{}", size, result)
 }
