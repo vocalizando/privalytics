@@ -91,7 +91,5 @@ fn entry_random_uid(data: &RequestEntry) -> String {
         .expect("Clock is going backwards?")
         .as_secs();
 
-    // 769 doesn't have any special meaning here, it could be any number
-    let result = u128::try_from(size).unwrap_or(769) * u128::from(date);
-    format!("{}{}", size, result)
+    format!("{}d{}", size, date)
 }
