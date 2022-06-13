@@ -32,7 +32,10 @@ fn launch() -> Rocket<Build> {
     };
 
     rocket::custom(&cfg)
-        .attach(CorsFairing)
+        .attach(CorsFairing {
+            // FIXME: No need to read this two times: derive Clone? Rc?
+            config: Config::load(CONFIG_PATH).expect("Couldn't load config"),
+        })
         .mount("/api",routes![add_entry])
         .manage(RocketState {
             config,
