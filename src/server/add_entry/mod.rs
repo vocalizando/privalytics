@@ -89,7 +89,7 @@ fn entry_random_uid(data: &RequestEntry) -> String {
     let date = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)
         .expect("Clock is going backwards?")
-        .as_secs();
+        .as_millis();
 
     format!("{}d{}", size, date)
 }

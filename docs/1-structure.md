@@ -1,16 +1,9 @@
 # Structure
 
 ## Saving data
-- A [``bson``](https://github.com/mongodb/bson-rust) file that contains all the analytics data
-```json5
-// Filename is Base64-encoded Origin header
+A file is created for each entry, the name of the file is the following (temp):
 
-{
-  "data": [
-    // ...
-  ]
-} 
-```
+``format!("{size_of(data)}d{epoch_millis}-{hostname_hex}")``
 
 ## Analytics structure
 - The analytics data should be:
