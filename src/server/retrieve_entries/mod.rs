@@ -40,6 +40,7 @@ impl<'r, 'o: 'r> Responder<'r, 'o> for EntriesResponse {
 
 #[rocket::post("/retrieve", data = "<data>")]
 pub fn retrieve_entries(data: Json<EntrySearchData>, _protected: ProtectedApiReadScope) -> Result<EntriesResponse, String> {
+    // FIXME: Without this, rustc crashes, lmao??
     let _a = data.to;
     let path = fs::read_dir(SAVE_PATH).unwrap();
 
