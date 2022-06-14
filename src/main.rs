@@ -1,6 +1,7 @@
 use rocket::{Build, Rocket, Config as RocketConfig, routes};
 use crate::server::fairings::CorsFairing;
 use crate::server::add_entry::add_entry;
+use crate::server::retrieve_entries::retrieve_entries;
 use crate::structures::entry::{Entry, Metadata};
 use crate::structures::config::Config;
 use crate::structures::users::Users;
@@ -36,7 +37,7 @@ fn launch() -> Rocket<Build> {
             // FIXME: No need to read this two times: derive Clone? Rc?
             config: Config::load(CONFIG_PATH).expect("Couldn't load config"),
         })
-        .mount("/api",routes![add_entry])
+        .mount("/api",routes![add_entry, retrieve_entries])
         .manage(RocketState {
             config,
             users,
