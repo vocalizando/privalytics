@@ -5,7 +5,7 @@ use serde::{Serialize, Deserialize};
 use rocket::http::{ContentType, Status};
 use rocket::response::Responder;
 use rocket::serde::json::Json;
-use crate::{Entry, Metadata, SAVE_PATH};
+use crate::{Entry, SAVE_PATH};
 use crate::server::guards::ProtectedApiReadScope;
 
 #[derive(Serialize, Deserialize)]
@@ -40,6 +40,7 @@ impl<'r, 'o: 'r> Responder<'r, 'o> for EntriesResponse {
 
 #[rocket::post("/retrieve", data = "<data>")]
 pub fn retrieve_entries(data: Json<EntrySearchData>, _protected: ProtectedApiReadScope) -> Result<EntriesResponse, String> {
+    let _a = data.to;
     let path = fs::read_dir(SAVE_PATH).unwrap();
 
     // TODO: Implement ``from`` and ``to``

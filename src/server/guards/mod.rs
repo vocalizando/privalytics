@@ -31,13 +31,13 @@ impl<'r> FromRequest<'r> for ProtectedApiReadScope {
         let headers = request.headers();
 
         if let Some(header) = headers.get_one("Authorization") {
-            let user = header.split_whitespace().collect::<Vec<&str>>().get(1).unwrap().split(":").collect::<Vec<&str>>();
+            let user = header.split_whitespace().collect::<Vec<&str>>().get(1).unwrap().split(':').collect::<Vec<&str>>();
             let username = user.get(0).unwrap();
             let token = user.get(1).unwrap();
             let state = request.guard::<&State<RocketState>>().await.unwrap();
 
             if let Some(userdata) = state.users.get_userdata(username) {
-                if userdata.token == String::from(*token) {
+                if userdata.token == **token {
                     Outcome::Success(ProtectedApiReadScope)
                 } else {
                     Outcome::Failure((
