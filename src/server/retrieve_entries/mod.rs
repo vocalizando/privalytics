@@ -39,7 +39,7 @@ impl<'r, 'o: 'r> Responder<'r, 'o> for EntriesResponse {
 }
 
 #[rocket::post("/retrieve", data = "<data>")]
-pub fn retrieve_entries(_data: Json<EntrySearchData>, _protected: ProtectedApiReadScope) -> Result<EntriesResponse, String> {
+pub fn retrieve_entries(data: Json<EntrySearchData>, _protected: ProtectedApiReadScope) -> Result<EntriesResponse, String> {
     let path = fs::read_dir(SAVE_PATH).unwrap();
 
     // TODO: Implement ``from`` and ``to``
