@@ -33,7 +33,7 @@ impl<'r> FromRequest<'r> for ProtectedApiReadScope {
 
         if let Some(header) = headers.get_one("Authorization") {
             let user = header.split_whitespace().collect::<Vec<&str>>().get(1).unwrap().split(':').collect::<Vec<&str>>();
-            let username = user.get(0).unwrap();
+            let username = user.first().unwrap();
             let token = user.get(1).unwrap();
             let state = request.guard::<&State<RocketState>>().await.unwrap();
 

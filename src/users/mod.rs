@@ -14,7 +14,6 @@ impl Users {
     pub fn get_userdata(&self, username: &str) -> Option<UserData> {
         let users = self.users.iter()
             .filter(|d| d.username == *username)
-            .map(|d| &(*d))
             .map(|d| d.to_owned())
             .collect::<Vec<UserData>>();
 
