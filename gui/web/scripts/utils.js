@@ -31,10 +31,11 @@ function object_to_html(data) {
 
 /**
  * Create HTML representation of entry
+ * @param {AuthData} auth_data
  * @param {Entry[]} entries
  * @return {string}
  */
-function show_entries(entries) {
+function show_entries(auth_data, entries) {
     let return_value = '<ul class="list-group">'
 
     for (const entry of entries.reverse()) {
@@ -46,7 +47,8 @@ function show_entries(entries) {
             ${entry.metadata.page ? `Page: ${encodeURI(entry.metadata.page)}<br>` : ""}
             ${entry.metadata.uid ? `UID: ${entry.metadata.uid}<br>` : ""}
             <b>Data</b><br>
-            ${object_to_html(entry.data)}
+            ${object_to_html(entry.data)}<br>
+            <button type="button" class="btn btn-danger" onclick="window.privalytics_api.delete_entry(JSON.parse(decodeURIComponent('${encodeURIComponent(JSON.stringify(auth_data))}')), '${entry.metadata.duid}'); window.loader.reload(JSON.parse(decodeURIComponent('${encodeURIComponent(JSON.stringify(auth_data))}')))">Delete</button>
         </div></li>`
     }
 

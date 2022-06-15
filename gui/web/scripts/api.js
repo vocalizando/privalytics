@@ -1,4 +1,5 @@
 const RETRIEVE_ENDPOINT = "/api/retrieve";
+const DELETE_ENDPOINT = "/api/delete";
 
 /**
  * @typedef {Object} AuthData Data used for authentication
@@ -19,10 +20,10 @@ const RETRIEVE_ENDPOINT = "/api/retrieve";
 /**
  * Retrieve all entries from the API
  * @param {AuthData} auth_data
- * @return {Entry[]}
+ * @return {Promise<Entry[]>}
  */
 async function retrieve_all_entries(auth_data) {
-    let response = await fetch(RETRIEVE_ENDPOINT, {
+    const response = await fetch(RETRIEVE_ENDPOINT, {
         method: "POST",
         headers: {
             "Accept": "*/*",
@@ -38,8 +39,29 @@ async function retrieve_all_entries(auth_data) {
     return await response.json();
 }
 
+/**
+ * Delete entry
+ * @param {AuthData} auth_data
+ * @param {string} entry Entry's duid
+ * @return {Promise<void>}
+ */
+async function delete_entry(auth_data, entry) {
+    await fetch(DELETE_ENDPOINT, {
+        method: "POST",
+        headers: {
+            "Accept": "*/*",
+            "Content-Type": "application/json",
+            "Authorization": generate_authorization_header(auth_data),
+        },
+        body: JSON.stringify({
+            duid: entry
+        })
+    });
+}
+
 window.privalytics_api = {
     retrieve_all_entries,
+    delete_entry,
 }
 
 /**
