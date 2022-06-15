@@ -1,13 +1,11 @@
 #![allow(clippy::search_is_some)]
 
-use std::mem::size_of_val;
 use std::time::SystemTime;
 use rocket::serde::json::Json;
 use rocket::State;
 use uuid::Uuid;
 use serde::{Serialize, Deserialize};
 use crate::{Entry, Metadata, RocketState, SAVE_PATH};
-use crate::path::HashPath;
 use crate::server::guards::HeadersGuard;
 use crate::structures::entry::Data;
 
@@ -69,8 +67,7 @@ pub fn add_entry(data: Json<RequestEntry>, headers_guard: HeadersGuard, _state: 
         return Err(String::from("Invalid protocol"))
     }
 
-    let split_header = origin_header.split("://").collect::<Vec<&str>>();
-    if split_header.len() < 2 {
+    if origin_header.split("://").count() < 2 {
         return Err(String::from("Invalid hostname"))
     }
 

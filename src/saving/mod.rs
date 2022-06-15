@@ -48,7 +48,7 @@ impl Entry {
         for entry in path {
             let path = entry?.path();
 
-            if path.to_str().ok_or(Box::new(EmptyError))?.ends_with(".bson") {
+            if path.to_str().ok_or_else(|| Box::new(EmptyError))?.ends_with(".bson") {
                 entries.push(Entry::load(&path)?);
             }
         }

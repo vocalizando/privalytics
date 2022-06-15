@@ -1,7 +1,7 @@
 use std::fs;
 use rocket::serde::json::Json;
 use serde::{Serialize, Deserialize};
-use crate::{Entry, SAVE_PATH};
+use crate::{SAVE_PATH};
 use crate::server::guards::ProtectedApiWriteScope;
 
 #[derive(Serialize, Deserialize)]
