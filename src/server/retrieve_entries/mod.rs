@@ -42,17 +42,9 @@ impl<'r, 'o: 'r> Responder<'r, 'o> for EntriesResponse {
 pub fn retrieve_entries(data: Json<EntrySearchData>, _protected: ProtectedApiReadScope) -> Result<EntriesResponse, String> {
     // FIXME: Without this, rustc crashes, lmao??
     let _a = data.to;
-    let path = fs::read_dir(SAVE_PATH).unwrap();
 
     // TODO: Implement ``from`` and ``to``
-    let mut entries = vec![];
-    for entry in path {
-        let path = entry.unwrap().path();
-
-        if path.to_str().unwrap().ends_with(".bson") {
-            entries.push(Entry::load(&path).unwrap());
-        }
-    }
+    let entries = Entry::load_entries(SAVE_PATH).unwrap();
 
     Ok(EntriesResponse::from(entries))
 }
