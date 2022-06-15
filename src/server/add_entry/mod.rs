@@ -63,8 +63,8 @@ pub fn add_entry(data: Json<RequestEntry>, headers_guard: HeadersGuard, _state: 
     }
     if VALID_PROTOCOLS.iter()
         .filter(|v| origin_header.starts_with(*v))
-        .collect::<Vec<&&str>>()
-        .is_empty() {
+        .next()
+        .is_none() {
         return Err(String::from("Invalid protocol"))
     }
 
