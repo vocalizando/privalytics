@@ -1,3 +1,5 @@
+#![allow(clippy::search_is_some)]
+
 use std::mem::size_of_val;
 use std::time::SystemTime;
 use rocket::serde::json::Json;
@@ -62,8 +64,7 @@ pub fn add_entry(data: Json<RequestEntry>, headers_guard: HeadersGuard, _state: 
         return Err(String::from("Null Origin header"))
     }
     if VALID_PROTOCOLS.iter()
-        .filter(|v| origin_header.starts_with(*v))
-        .next()
+        .find(|v| origin_header.starts_with(*v))
         .is_none() {
         return Err(String::from("Invalid protocol"))
     }
