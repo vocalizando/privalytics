@@ -3,7 +3,7 @@
 ## Saving data
 A file is created for each entry, the name of the file is the following (temp):
 
-``format!("{size_of(data)}d{epoch_millis}-{hostname_hex}")``
+``{duid}.bson``
 
 ## Analytics structure
 - The analytics data should be:

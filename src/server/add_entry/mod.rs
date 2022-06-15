@@ -74,23 +74,12 @@ pub fn add_entry(data: Json<RequestEntry>, headers_guard: HeadersGuard, _state: 
         return Err(String::from("Invalid hostname"))
     }
 
-    let base_filename = split_header.get(1).unwrap().hash_hex();
-    let filename = format!("{}/{}-{}.bson", SAVE_PATH, entry_random_uid(&data), base_filename);
-
     let data = Entry::from(data);
+    let filename = format!("{}/{}.bson", SAVE_PATH, &data.metadata.duid);
+
     if let Err(e) = data.save(&filename) {
         return Err(e.to_string())
     }
 
     Ok(())
-}
-
-fn entry_random_uid(data: &RequestEntry) -> String {
-    let size = size_of_val(data);
-    let date = SystemTime::now()
-        .duration_since(SystemTime::UNIX_EPOCH)
-        .expect("Clock is going backwards?")
-        .as_millis();
-
-    format!("{}d{}", size, date)
 }

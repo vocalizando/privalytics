@@ -11,19 +11,11 @@ pub struct DeleteEntryData {
 
 #[rocket::post("/delete", data = "<data>")]
 pub fn delete_entry(data: Json<DeleteEntryData>, _protected: ProtectedApiWriteScope) -> Result<(), String> {
-    let path = fs::read_dir(SAVE_PATH).unwrap();
+    // FIXME: Check no ``/`` or ``\`` are included on the requested duid
 
-    for entry in path {
-        let path = entry.unwrap().path();
-
-        if path.to_str().unwrap().ends_with(".bson") {
-            let entry = Entry::load(&path).unwrap();
-
-            if entry.metadata.duid == data.duid {
-                fs::remove_file(path).unwrap();
-            }
-        }
-    }
-
-    Ok(())
+    return if let Err(e) = fs::remove_file(format!("{}/{}.bson", SAVE_PATH, data.duid)) {
+        Err(e.into_inner().unwrap().to_string())
+    } else {
+        Ok(())
+    };
 }
