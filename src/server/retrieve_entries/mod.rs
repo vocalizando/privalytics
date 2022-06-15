@@ -50,11 +50,7 @@ pub fn retrieve_entries(data: Json<EntrySearchData>, _protected: ProtectedApiRea
         let path = entry.unwrap().path();
 
         if path.to_str().unwrap().ends_with(".bson") {
-            let bytes = fs::read(path).unwrap();
-            let document = bson::Document::from_reader(&mut bytes.as_slice()).unwrap();
-            let entry: Entry = bson::from_document(document).unwrap();
-
-            entries.push(entry);
+            entries.push(Entry::load(&path).unwrap());
         }
     }
 
