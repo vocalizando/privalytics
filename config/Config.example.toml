@@ -1,5 +1,5 @@
 # All of the fields are optional, port will default to 8080
 
 client_key = "client-key"
-cors_hostnames = ["localhost", "example.com"]
+cors_hostnames = ["http://localhost", "https://example.com"]
 port = 80

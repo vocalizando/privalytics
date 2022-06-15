@@ -80,3 +80,8 @@ pub fn add_entry(data: Json<RequestEntry>, headers_guard: HeadersGuard, _state: 
 
     Ok(())
 }
+
+#[rocket::options("/submit")]
+pub fn add_entry_options() -> Result<(), ()> {
+    Ok(())
+}

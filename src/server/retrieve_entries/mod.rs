@@ -47,3 +47,9 @@ pub fn retrieve_entries(data: Json<EntrySearchData>, _protected: ProtectedApiRea
 
     Ok(EntriesResponse::from(entries))
 }
+
+
+#[rocket::options("/retrieve")]
+pub fn retrieve_entries_options() -> Result<(), ()> {
+    Ok(())
+}

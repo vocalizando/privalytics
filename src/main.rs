@@ -1,9 +1,9 @@
 use rocket::{Build, Rocket, Config as RocketConfig, routes};
 use rocket::fs::FileServer;
 use crate::server::fairings::CorsFairing;
-use crate::server::add_entry::add_entry;
-use crate::server::retrieve_entries::retrieve_entries;
-use crate::server::delete_entry::delete_entry;
+use crate::server::add_entry::{add_entry, add_entry_options};
+use crate::server::retrieve_entries::{retrieve_entries, retrieve_entries_options};
+use crate::server::delete_entry::{delete_entry, delete_entry_options};
 use crate::structures::entry::{Entry, Metadata};
 use crate::structures::config::Config;
 use crate::structures::users::Users;
@@ -45,6 +45,11 @@ fn launch() -> Rocket<Build> {
             add_entry,
             retrieve_entries,
             delete_entry,
+        ])
+        .mount("/api", routes![
+            add_entry_options,
+            retrieve_entries_options,
+            delete_entry_options,
         ])
         .manage(RocketState {
             config,

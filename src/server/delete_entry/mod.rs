@@ -19,3 +19,8 @@ pub fn delete_entry(data: Json<DeleteEntryData>, _protected: ProtectedApiWriteSc
         Ok(())
     };
 }
+
+#[rocket::options("/delete")]
+pub fn delete_entry_options() -> Result<(), ()> {
+    Ok(())
+}
