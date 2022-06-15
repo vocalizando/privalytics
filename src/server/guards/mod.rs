@@ -23,42 +23,52 @@ impl<'r> FromRequest<'r> for HeadersGuard<'r> {
 }
 
 pub struct ProtectedApiReadScope;
+pub struct ProtectedApiWriteScope;
+pub struct ProtectedApiAdminScope;
 
-#[rocket::async_trait]
-impl<'r> FromRequest<'r> for ProtectedApiReadScope {
-    type Error = String;
+macro_rules! api_scope {
+    ($struct:ident, $enum_value:expr) => {
+        #[rocket::async_trait]
+        impl<'r> FromRequest<'r> for $struct {
+            type Error = String;
 
-    async fn from_request(request: &'r Request<'_>) -> Outcome<Self, Self::Error> {
-        let headers = request.headers();
+            async fn from_request(request: &'r Request<'_>) -> Outcome<Self, Self::Error> {
+                let headers = request.headers();
 
-        if let Some(header) = headers.get_one("Authorization") {
-            let user = header.split_whitespace().collect::<Vec<&str>>().get(1).unwrap().split(':').collect::<Vec<&str>>();
-            let username = user.first().unwrap();
-            let token = user.get(1).unwrap();
-            let state = request.guard::<&State<RocketState>>().await.unwrap();
+                if let Some(header) = headers.get_one("Authorization") {
+                    let user = header.split_whitespace().collect::<Vec<&str>>().get(1).unwrap().split(':').collect::<Vec<&str>>();
+                    let username = user.first().unwrap();
+                    let token = user.get(1).unwrap();
+                    let state = request.guard::<&State<RocketState>>().await.unwrap();
 
-            if let Some(userdata) = state.users.get_userdata(username) {
-                if userdata.token == **token && userdata.scope >= Scope::Read {
-                    Outcome::Success(ProtectedApiReadScope)
+                    if let Some(userdata) = state.users.get_userdata(username) {
+                        if userdata.token == **token && userdata.scope >= $enum_value {
+                            Outcome::Success($struct)
+                        } else {
+                            Outcome::Failure((
+                                Status::new(401),
+                                "Invalid user".to_string()
+                            ))
+                        }
+                    } else {
+                        Outcome::Failure((
+                            Status::new(401),
+                            "Invalid user".to_string()
+                        ))
+                    }
+
+
                 } else {
                     Outcome::Failure((
-                        Status::new(401),
-                        "Invalid user".to_string()
+                        Status::new(400),
+                        "No Authorization header".to_string()
                     ))
                 }
-            } else {
-                Outcome::Failure((
-                    Status::new(401),
-                    "Invalid user".to_string()
-                ))
             }
-
-
-        } else {
-            Outcome::Failure((
-                Status::new(400),
-                "No Authorization header".to_string()
-            ))
         }
-    }
+    };
 }
+
+api_scope!(ProtectedApiReadScope, Scope::Read);
+api_scope!(ProtectedApiWriteScope, Scope::Write);
+api_scope!(ProtectedApiAdminScope, Scope::Admin);

@@ -44,7 +44,6 @@ impl Entry {
     pub fn load_entries<P: AsRef<Path> + ?Sized>(path: &P) -> Result<Vec<Entry>, Box<dyn Error>> {
         let path = fs::read_dir(path).unwrap();
 
-
         let mut entries = vec![];
         for entry in path {
             let path = entry?.path();

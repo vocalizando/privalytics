@@ -1,4 +1,3 @@
-use std::fs;
 use std::io::Cursor;
 use rocket::{Request, Response};
 use serde::{Serialize, Deserialize};

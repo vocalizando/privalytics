@@ -3,6 +3,7 @@ use rocket::fs::FileServer;
 use crate::server::fairings::CorsFairing;
 use crate::server::add_entry::add_entry;
 use crate::server::retrieve_entries::retrieve_entries;
+use crate::server::delete_entry::delete_entry;
 use crate::structures::entry::{Entry, Metadata};
 use crate::structures::config::Config;
 use crate::structures::users::Users;
@@ -40,7 +41,11 @@ fn launch() -> Rocket<Build> {
             config: Config::load(CONFIG_PATH).expect("Couldn't load config"),
         })
         .mount("/gui", FileServer::from(GUI_PATH))
-        .mount("/api",routes![add_entry, retrieve_entries])
+        .mount("/api",routes![
+            add_entry,
+            retrieve_entries,
+            delete_entry,
+        ])
         .manage(RocketState {
             config,
             users,
