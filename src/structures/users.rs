@@ -12,9 +12,9 @@ pub struct UserData {
     pub scope: Scope,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, PartialOrd, Clone, Debug)]
 pub enum Scope {
-    Read,
-    Write,
-    Admin,
+    Read = 0,
+    Write = 1,
+    Admin = 2,
 }

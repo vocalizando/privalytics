@@ -3,6 +3,7 @@ use rocket::http::{HeaderMap, Status};
 use rocket::{Request, State};
 use rocket::request::{FromRequest, Outcome};
 use crate::RocketState;
+use crate::structures::users::Scope;
 
 pub struct HeadersGuard<'r> {
     pub headers: HeaderMap<'r>
@@ -37,7 +38,7 @@ impl<'r> FromRequest<'r> for ProtectedApiReadScope {
             let state = request.guard::<&State<RocketState>>().await.unwrap();
 
             if let Some(userdata) = state.users.get_userdata(username) {
-                if userdata.token == **token {
+                if userdata.token == **token && userdata.scope >= Scope::Read {
                     Outcome::Success(ProtectedApiReadScope)
                 } else {
                     Outcome::Failure((
