@@ -23,7 +23,7 @@ pub type Data = HashMap<String, DataValues>;
 #[derive(Debug)]
 pub enum DataValues {
     String(String),
-    Number(u32),
+    Number(i64),
     Bool(bool),
 }
 
@@ -31,7 +31,7 @@ impl From<DataValues> for Bson {
     fn from(v: DataValues) -> Self {
         match v {
             DataValues::String(v) => Bson::String(v),
-            DataValues::Number(v) => Bson::Int32(i32::try_from(v.to_owned()).unwrap()),
+            DataValues::Number(v) => Bson::Int64(v.to_owned()),
             DataValues::Bool(v) => Bson::Boolean(v),
         }
     }
@@ -44,7 +44,7 @@ impl Serialize for DataValues {
     {
         match self {
             DataValues::String(v) => serializer.serialize_str(v.as_str()),
-            DataValues::Number(v) => serializer.serialize_i32(i32::try_from(v.to_owned()).unwrap()),
+            DataValues::Number(v) => serializer.serialize_i64(v.to_owned()),
             DataValues::Bool(v) => serializer.serialize_bool(*v),
         }
     }
@@ -62,8 +62,12 @@ impl<'de> Visitor<'de> for DataValuesVisitor {
         Ok(DataValues::Bool(v))
     }
 
-    fn visit_i32<E>(self, v: i32) -> Result<Self::Value, E> where E: Error {
-        Ok(DataValues::Number(u32::try_from(v).unwrap()))
+    fn visit_i64<E>(self, v: i64) -> Result<Self::Value, E> where E: Error {
+        Ok(DataValues::Number(v))
+    }
+
+    fn visit_u64<E>(self, v: u64) -> Result<Self::Value, E> where E: Error {
+        Ok(DataValues::Number(i64::try_from(v).unwrap()))
     }
 
     fn visit_str<E>(self, v: &str) -> Result<Self::Value, E> where E: Error {
@@ -84,7 +88,7 @@ macro_rules! impl_from_for_data_values {
     ($type:ty, $name:ident) => {
         impl From<$type> for DataValues {
             fn from(v: $type) -> Self {
-                DataValues::$name(v)
+                DataValues::$name(v.into())
             }
         }
     }
