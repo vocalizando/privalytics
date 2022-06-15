@@ -1,7 +1,7 @@
 # Structure
 
 ## Saving data
-A file is created for each entry, the name of the file is the following (temp):
+A file is created for each entry, the name of the file is the following:
 
 ``{duid}.bson``
 
@@ -11,7 +11,7 @@ A file is created for each entry, the name of the file is the following (temp):
   - Support custom data
     - ``key:value`` format
     - Where not every ``key`` sent by the client is not valid, only those defined by the server beforehand
-    - Where ``value`` can be: ``String``, ``Number (u32 or u64)``, ``Bool``, ``Date`` (support for ``Tuples`` is being considered)
+    - Where ``value`` can be: ``String``, ``Number (i64)``, ``Bool``, ``Date`` (support for ``Tuples`` is being considered)
   - Metadata-less to preserve anonymity
     - By default, the only metadata saved is request date
     - A client-provided or server-provided unique identifier is also supported
@@ -91,7 +91,7 @@ it is quite easy to circumvent this protection. Some steps can be taken to preve
 ## Retrieve and remove analytics data
 There is one endpoint to retrieve: ``/api/retrieve``.
 
-There is one endpoint to remove: ``/api/remove``.
+There is one endpoint to delete: ``/api/delete``.
 
 All endpoints require an ``Authorization`` header
 
@@ -137,7 +137,7 @@ There are ``3`` scopes:
 **Example request body**:
 ```json5
 {
-  "remove": "61fd401f-5379-4cab-992a-9266477e32e1"// This is the ``duid``
+  "duid": "61fd401f-5379-4cab-992a-9266477e32e1"
 }
 ```
 
