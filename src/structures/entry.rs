@@ -97,7 +97,6 @@ macro_rules! impl_from_for_data_values {
 impl_from_for_data_values!(String, String);
 impl_from_for_data_values!(u32, Number);
 impl_from_for_data_values!(i32, Number);
-impl_from_for_data_values!(u64, Number);
 impl_from_for_data_values!(i64, Number);
 impl_from_for_data_values!(bool, Bool);
 
