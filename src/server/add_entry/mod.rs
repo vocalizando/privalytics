@@ -42,20 +42,20 @@ impl From<RequestEntry> for Entry {
 }
 
 // TODO: Add Authorization guard
-#[rocket::post("/submit", data = "<data>")]
-pub fn add_entry(data: Json<RequestEntry>, headers_guard: HeadersGuard, state: &State<RocketState>) -> Result<(), String> {
+#[rocket::post("/submit", data = "<entry>")]
+pub fn add_entry(entry: Json<RequestEntry>, headers_guard: HeadersGuard, state: &State<RocketState>) -> Result<(), String> {
     let headers = headers_guard.headers;
-    let mut data = data.into_inner();
-    data.metadata.date = Some(SystemTime::now()
+    let mut entry = entry.into_inner();
+    entry.metadata.date = Some(SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)
         .expect("Clock is going backwards?")
         .as_millis() as u64);
 
-    data.metadata.duid = Some(Uuid::new_v4().to_string());
+    entry.metadata.duid = Some(Uuid::new_v4().to_string());
 
     // TODO: Implement server-side UID and page support
 
-    let data = data;
+    let entry = entry;
     let origin_header = headers.get_one("Origin").unwrap_or("null");
 
     if EMPTY_STR.contains(&origin_header) {
@@ -72,17 +72,17 @@ pub fn add_entry(data: Json<RequestEntry>, headers_guard: HeadersGuard, state: &
     }
 
     if let Some(allowed_keys) = &state.config.allowed_keys {
-        for (key, _v) in &data.data {
+        for (key, _v) in &entry.data {
             if !allowed_keys.contains(key) {
                 return Err(String::from("Use of invalid keys"))
             }
         }
     }
 
-    let data = Entry::from(data);
-    let filename = format!("{}/{}.bson", SAVE_PATH, &data.metadata.duid);
+    let entry = Entry::from(entry);
+    let filename = format!("{}/{}.bson", SAVE_PATH, &entry.metadata.duid);
 
-    if let Err(e) = data.save(&filename) {
+    if let Err(e) = entry.save(&filename) {
         return Err(e.to_string())
     }
 
