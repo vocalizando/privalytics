@@ -73,7 +73,7 @@ pub fn add_entry(entry: Json<RequestEntry>, headers_guard: HeadersGuard, state: 
     }
 
     if let Some(allowed_keys) = &state.config.allowed_keys {
-        for (key, _v) in &entry.data {
+        for key in entry.data.keys() {
             if !allowed_keys.contains(key) {
                 return Err(AddEntryError::ForbiddenKeys)
             }
