@@ -1,9 +1,9 @@
 use rocket::{Build, Rocket, Config as RocketConfig, routes};
 use rocket::fs::FileServer;
 use crate::server::fairings::CorsFairing;
-use crate::server::add_entry::{add_entry, add_entry_options};
-use crate::server::retrieve_entries::{retrieve_entries, retrieve_entries_options};
-use crate::server::delete_entry::{delete_entry, delete_entry_options};
+use crate::server::routes::add_entry::{add_entry, add_entry_options};
+use crate::server::routes::retrieve_entries::{retrieve_entries, retrieve_entries_options};
+use crate::server::routes::delete_entry::{delete_entry, delete_entry_options};
 use crate::structures::entry::{Entry, Metadata};
 use crate::structures::config::Config;
 use crate::structures::users::Users;

@@ -8,6 +8,7 @@ use serde::{Serialize, Deserialize};
 use crate::{Entry, Metadata, RocketState, SAVE_PATH};
 use crate::server::guards::HeadersGuard;
 use crate::structures::entry::Data;
+use crate::structures::errors::add_entry_error::AddEntryError;
 
 const EMPTY_STR: [&str; 3] = ["", "null", "undefined"];
 const VALID_PROTOCOLS: [&str; 2] = ["http://", "https://"];
@@ -43,7 +44,7 @@ impl From<RequestEntry> for Entry {
 
 // TODO: Add Authorization guard
 #[rocket::post("/submit", data = "<entry>")]
-pub fn add_entry(entry: Json<RequestEntry>, headers_guard: HeadersGuard, state: &State<RocketState>) -> Result<(), String> {
+pub fn add_entry(entry: Json<RequestEntry>, headers_guard: HeadersGuard, state: &State<RocketState>) -> Result<(), AddEntryError> {
     let headers = headers_guard.headers;
     let mut entry = entry.into_inner();
     entry.metadata.date = Some(SystemTime::now()
@@ -59,22 +60,22 @@ pub fn add_entry(entry: Json<RequestEntry>, headers_guard: HeadersGuard, state: 
     let origin_header = headers.get_one("Origin").unwrap_or("null");
 
     if EMPTY_STR.contains(&origin_header) {
-        return Err(String::from("Null Origin header"))
+        return Err(AddEntryError::NoOriginHeader)
     }
     if VALID_PROTOCOLS.iter()
         .find(|v| origin_header.starts_with(*v))
         .is_none() {
-        return Err(String::from("Invalid protocol"))
+        return Err(AddEntryError::InvalidProtocol)
     }
 
     if origin_header.split("://").count() < 2 {
-        return Err(String::from("Invalid hostname"))
+        return Err(AddEntryError::InvalidHostname)
     }
 
     if let Some(allowed_keys) = &state.config.allowed_keys {
         for (key, _v) in &entry.data {
             if !allowed_keys.contains(key) {
-                return Err(String::from("Use of invalid keys"))
+                return Err(AddEntryError::ForbiddenKeys)
             }
         }
     }
@@ -83,7 +84,7 @@ pub fn add_entry(entry: Json<RequestEntry>, headers_guard: HeadersGuard, state: 
     let filename = format!("{}/{}.bson", SAVE_PATH, &entry.metadata.duid);
 
     if let Err(e) = entry.save(&filename) {
-        return Err(e.to_string())
+        return Err(AddEntryError::Unknown(e.to_string()))
     }
 
     Ok(())
