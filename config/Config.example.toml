@@ -2,4 +2,5 @@
 
 client_key = "client-key"
 cors_hostnames = ["http://localhost", "https://example.com"]
+allowed_keys = ["session:start", "session:end"]
 port = 80

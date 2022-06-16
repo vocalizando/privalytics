@@ -43,7 +43,7 @@ impl From<RequestEntry> for Entry {
 
 // TODO: Add Authorization guard
 #[rocket::post("/submit", data = "<data>")]
-pub fn add_entry(data: Json<RequestEntry>, headers_guard: HeadersGuard, _state: &State<RocketState>) -> Result<(), String> {
+pub fn add_entry(data: Json<RequestEntry>, headers_guard: HeadersGuard, state: &State<RocketState>) -> Result<(), String> {
     let headers = headers_guard.headers;
     let mut data = data.into_inner();
     data.metadata.date = Some(SystemTime::now()
@@ -69,6 +69,14 @@ pub fn add_entry(data: Json<RequestEntry>, headers_guard: HeadersGuard, _state: 
 
     if origin_header.split("://").count() < 2 {
         return Err(String::from("Invalid hostname"))
+    }
+
+    if let Some(allowed_keys) = &state.config.allowed_keys {
+        for (key, _v) in &data.data {
+            if !allowed_keys.contains(key) {
+                return Err(String::from("Use of invalid keys"))
+            }
+        }
     }
 
     let data = Entry::from(data);

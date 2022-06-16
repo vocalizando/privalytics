@@ -5,7 +5,7 @@
 - [ ] Entry Structure
   - [ ] Data
     - [x] ``key:value`` format
-    - [ ] Key whitelisting
+    - [x] Key whitelisting
     - [ ] Value support
       - [x] String
       - [x] Number (i64)
