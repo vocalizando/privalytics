@@ -96,6 +96,9 @@ macro_rules! impl_from_for_data_values {
 
 impl_from_for_data_values!(String, String);
 impl_from_for_data_values!(u32, Number);
+impl_from_for_data_values!(i32, Number);
+impl_from_for_data_values!(u64, Number);
+impl_from_for_data_values!(i64, Number);
 impl_from_for_data_values!(bool, Bool);
 
 #[cfg(test)]
@@ -116,7 +119,7 @@ mod data_values_tests {
     fn from_u32() {
         let data = DataValues::from(42_u32);
         match data {
-            DataValues::Number(v) => { assert_eq!(v, 42_u32) }
+            DataValues::Number(v) => { assert_eq!(v, 42_i64) }
             _ => { panic!("not a number") }
         }
     }

@@ -59,7 +59,7 @@ impl<'r, 'o: 'r> Responder<'r, 'o> for AddEntryError {
 
         Ok(Response::build()
             .status(status)
-            .sized_body(error.clone().len(), Cursor::new(error.clone()))
+            .sized_body(error.len(), Cursor::new(error))
             .finalize())
 
     }
