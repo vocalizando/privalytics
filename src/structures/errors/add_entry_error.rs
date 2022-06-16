@@ -56,7 +56,7 @@ impl<'r, 'o: 'r> Responder<'r, 'o> for AddEntryError {
                 (Status::InternalServerError, error)
             }
         };
-        
+
         Ok(Response::build()
             .status(status)
             .sized_body(error.clone().len(), Cursor::new(error.clone()))
