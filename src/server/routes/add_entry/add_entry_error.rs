@@ -1,8 +1,9 @@
+use std::error::Error;
 use std::io::Cursor;
 use rocket::http::Status;
 use rocket::{Request, Response};
 use rocket::response::Responder;
-use crate::structures::errors::GenericError;
+use crate::server::routes::errors::GenericError;
 
 pub enum AddEntryError {
     NoOriginHeader,
@@ -10,6 +11,12 @@ pub enum AddEntryError {
     InvalidHostname,
     ForbiddenKeys,
     Unknown(String),
+}
+
+impl From<Box<dyn Error>> for AddEntryError {
+    fn from(e: Box<dyn Error>) -> Self {
+        AddEntryError::Unknown(e.to_string())
+    }
 }
 
 impl<'r, 'o: 'r> Responder<'r, 'o> for AddEntryError {

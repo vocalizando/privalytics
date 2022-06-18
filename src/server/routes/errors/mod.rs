@@ -1,6 +1,4 @@
-use serde::{Serialize, Deserialize};
-
-pub mod add_entry_error;
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct GenericError {

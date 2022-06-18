@@ -4,11 +4,13 @@ use std::time::SystemTime;
 use rocket::serde::json::Json;
 use rocket::State;
 use uuid::Uuid;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use crate::{Entry, Metadata, RocketState, SAVE_PATH};
 use crate::server::guards::HeadersGuard;
 use crate::structures::entry::Data;
-use crate::structures::errors::add_entry_error::AddEntryError;
+use add_entry_error::AddEntryError;
+
+pub mod add_entry_error;
 
 const EMPTY_STR: [&str; 3] = ["", "null", "undefined"];
 const VALID_PROTOCOLS: [&str; 2] = ["http://", "https://"];

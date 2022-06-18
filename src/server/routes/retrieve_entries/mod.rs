@@ -1,11 +1,14 @@
 use std::io::Cursor;
 use rocket::{Request, Response};
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use rocket::http::{ContentType, Status};
 use rocket::response::Responder;
 use rocket::serde::json::Json;
 use crate::{Entry, SAVE_PATH};
 use crate::server::guards::ProtectedApiReadScope;
+use retrieve_entries_error::RetrieveEntriesError;
+
+pub mod retrieve_entries_error;
 
 #[derive(Serialize, Deserialize)]
 pub struct EntrySearchData {
@@ -38,12 +41,12 @@ impl<'r, 'o: 'r> Responder<'r, 'o> for EntriesResponse {
 }
 
 #[rocket::post("/retrieve", data = "<data>")]
-pub fn retrieve_entries(data: Json<EntrySearchData>, _protected: ProtectedApiReadScope) -> Result<EntriesResponse, String> {
+pub fn retrieve_entries(data: Json<EntrySearchData>, _protected: ProtectedApiReadScope) -> Result<EntriesResponse, RetrieveEntriesError> {
     // FIXME: Without this, rustc crashes, lmao??
     let _a = data.to;
 
     // TODO: Implement ``from`` and ``to``
-    let entries = Entry::load_entries(SAVE_PATH).unwrap();
+    let entries = Entry::load_entries(SAVE_PATH)?;
 
     Ok(EntriesResponse::from(entries))
 }

@@ -28,7 +28,7 @@
   - [ ] ``/api/retrieve``
     - [x] Retrieve data
     - [ ] Fine grain control of data received
-    - [ ] JSON response
+    - [x] JSON response
   - [ ] ``/api/remove``
     - [x] Remove entry from given ``duid``
     - [ ] JSON response
