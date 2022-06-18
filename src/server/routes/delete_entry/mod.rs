@@ -4,9 +4,9 @@ use rocket::serde::json::Json;
 use serde::{Serialize, Deserialize};
 use crate::{SAVE_PATH};
 use crate::server::guards::ProtectedApiWriteScope;
-use crate::server::routes::delete_entry::delete_entry_error::DeleteEntryError;
+use crate::server::routes::delete_entry::errors::DeleteEntryError;
 
-mod delete_entry_error;
+mod errors;
 
 #[derive(Serialize, Deserialize)]
 pub struct DeleteEntryData {

@@ -8,9 +8,9 @@ use serde::{Deserialize, Serialize};
 use crate::{Entry, Metadata, RocketState, SAVE_PATH};
 use crate::server::guards::HeadersGuard;
 use crate::structures::entry::Data;
-use add_entry_error::AddEntryError;
+use errors::AddEntryError;
 
-mod add_entry_error;
+mod errors;
 
 const EMPTY_STR: [&str; 3] = ["", "null", "undefined"];
 const VALID_PROTOCOLS: [&str; 2] = ["http://", "https://"];

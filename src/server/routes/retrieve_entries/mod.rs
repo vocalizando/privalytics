@@ -6,9 +6,9 @@ use rocket::response::Responder;
 use rocket::serde::json::Json;
 use crate::{Entry, SAVE_PATH};
 use crate::server::guards::ProtectedApiReadScope;
-use retrieve_entries_error::RetrieveEntriesError;
+use errors::RetrieveEntriesError;
 
-mod retrieve_entries_error;
+mod errors;
 
 #[derive(Serialize, Deserialize)]
 pub struct EntrySearchData {
