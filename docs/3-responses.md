@@ -24,6 +24,9 @@ _Nothing_
 _Array of entries_
 
 ## ``/api/remove``
+### Successful
+_Nothing_
+
 ### No entry found with given duid
 - id: ``not-found``
 
