@@ -1,36 +1,22 @@
-use std::error::Error;
-use std::io::Cursor;
 use rocket::http::Status;
 use rocket::{Request, Response};
 use rocket::response::Responder;
-use crate::server::routes::errors::GenericError;
+use crate::{build_response, impl_from_box_dyn_error, unknown_error};
 
 pub enum RetrieveEntriesError {
     Unknown(String),
 }
 
-impl From<Box<dyn Error>> for RetrieveEntriesError {
-    fn from(e: Box<dyn Error>) -> Self {
-        RetrieveEntriesError::Unknown(e.to_string())
-    }
-}
+impl_from_box_dyn_error!(RetrieveEntriesError);
 
 impl<'r, 'o: 'r> Responder<'r, 'o> for RetrieveEntriesError {
     fn respond_to(self, _request: &'r Request<'_>) -> rocket::response::Result<'o> {
         let (status, error) = match self {
             RetrieveEntriesError::Unknown(message) => {
-                let error = serde_json::to_string(&GenericError {
-                    id: "unknown".to_string(),
-                    message,
-                }).unwrap();
-
-                (Status::InternalServerError, error)
+                unknown_error!(message)
             }
         };
 
-        Ok(Response::build()
-            .status(status)
-            .sized_body(error.len(), Cursor::new(error))
-            .finalize())
+        Ok(build_response!(status, error))
     }
 }
