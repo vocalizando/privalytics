@@ -1,6 +1,10 @@
 # Privalytics
 Open source, privacy-friendly, blazing fast analytics
 
+## Progress
+The basic functionality (submit, retrieve and delete) is complete.
+[Some features are missing](docs/2-todo.md)
+
 ## Objectives
 - To create a _deploy and forget_ platform
 - To create a _simple yet secure_ API
