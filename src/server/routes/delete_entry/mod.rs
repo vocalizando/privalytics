@@ -24,7 +24,7 @@ pub fn delete_entry(data: Json<DeleteEntryData>, _protected: ProtectedApiWriteSc
             _ => {
                 Err(DeleteEntryError::Unknown(
                     e.into_inner()
-                        .ok_or(DeleteEntryError::Unknown("into_inner failed".to_string()))?
+                        .ok_or_else(|| DeleteEntryError::Unknown("into_inner failed".to_string()))?
                         .to_string()
                 ))
             }
