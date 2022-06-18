@@ -17,7 +17,7 @@ pub struct DeleteEntryData {
 pub fn delete_entry(data: Json<DeleteEntryData>, _protected: ProtectedApiWriteScope) -> Result<(), DeleteEntryError> {
     // FIXME: Check no ``/`` or ``\`` are included on the requested duid
 
-    return if let Err(e) = fs::remove_file(format!("{}/{}.bson", SAVE_PATH, data.duid)) {
+    if let Err(e) = fs::remove_file(format!("{}/{}.bson", SAVE_PATH, data.duid)) {
         match e.kind() {
             ErrorKind::NotFound => Err(DeleteEntryError::NotFound),
             ErrorKind::ResourceBusy => Err(DeleteEntryError::ResourceBusy),
