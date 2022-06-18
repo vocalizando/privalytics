@@ -10,7 +10,7 @@ use crate::server::guards::HeadersGuard;
 use crate::structures::entry::Data;
 use add_entry_error::AddEntryError;
 
-pub mod add_entry_error;
+mod add_entry_error;
 
 const EMPTY_STR: [&str; 3] = ["", "null", "undefined"];
 const VALID_PROTOCOLS: [&str; 2] = ["http://", "https://"];

@@ -1,8 +1,12 @@
 use std::fs;
+use std::io::ErrorKind;
 use rocket::serde::json::Json;
 use serde::{Serialize, Deserialize};
 use crate::{SAVE_PATH};
 use crate::server::guards::ProtectedApiWriteScope;
+use crate::server::routes::delete_entry::delete_entry_error::DeleteEntryError;
+
+mod delete_entry_error;
 
 #[derive(Serialize, Deserialize)]
 pub struct DeleteEntryData {
@@ -10,14 +14,24 @@ pub struct DeleteEntryData {
 }
 
 #[rocket::post("/delete", data = "<data>")]
-pub fn delete_entry(data: Json<DeleteEntryData>, _protected: ProtectedApiWriteScope) -> Result<(), String> {
+pub fn delete_entry(data: Json<DeleteEntryData>, _protected: ProtectedApiWriteScope) -> Result<(), DeleteEntryError> {
     // FIXME: Check no ``/`` or ``\`` are included on the requested duid
 
     return if let Err(e) = fs::remove_file(format!("{}/{}.bson", SAVE_PATH, data.duid)) {
-        Err(e.into_inner().unwrap().to_string())
+        match e.kind() {
+            ErrorKind::NotFound => Err(DeleteEntryError::NotFound),
+            ErrorKind::ResourceBusy => Err(DeleteEntryError::ResourceBusy),
+            _ => {
+                Err(DeleteEntryError::Unknown(
+                    e.into_inner()
+                        .ok_or(DeleteEntryError::Unknown("into_inner failed".to_string()))?
+                        .to_string()
+                ))
+            }
+        }
     } else {
         Ok(())
-    };
+    }
 }
 
 #[rocket::options("/delete")]

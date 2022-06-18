@@ -1,3 +1,5 @@
+#![feature(io_error_more)]
+
 use rocket::{Build, Rocket, Config as RocketConfig, routes};
 use rocket::fs::FileServer;
 use crate::server::fairings::CorsFairing;

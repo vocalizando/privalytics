@@ -8,7 +8,7 @@ use crate::{Entry, SAVE_PATH};
 use crate::server::guards::ProtectedApiReadScope;
 use retrieve_entries_error::RetrieveEntriesError;
 
-pub mod retrieve_entries_error;
+mod retrieve_entries_error;
 
 #[derive(Serialize, Deserialize)]
 pub struct EntrySearchData {

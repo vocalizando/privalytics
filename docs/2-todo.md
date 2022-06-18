@@ -31,4 +31,4 @@
     - [x] JSON response
   - [ ] ``/api/remove``
     - [x] Remove entry from given ``duid``
-    - [ ] JSON response
+    - [x] JSON response
