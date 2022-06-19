@@ -20,11 +20,13 @@ macro_rules! impl_from_box_dyn_error {
 //FIXME: Trailing comma is _not_ optional
 #[macro_export]
 macro_rules! match_error {
-    ($status:expr, $id:literal, $message:literal,$(,)*) => {
-        ($status, serde_json::to_string(&$crate::server::routes::errors::GenericError {
-            id: $id.to_string(),
-            message: $message.to_string(),
-        }).unwrap())
+    ($($status:expr, $id:literal, $message:literal),* $(,)? ) => {
+        $(
+            ($status, serde_json::to_string(&$crate::server::routes::errors::GenericError {
+                id: $id.to_string(),
+                message: $message.to_string(),
+            }).unwrap())
+        )*
     }
 }
 
