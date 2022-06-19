@@ -42,13 +42,18 @@ impl<'r, 'o: 'r> Responder<'r, 'o> for EntriesResponse {
 
 #[rocket::post("/retrieve", data = "<data>")]
 pub fn retrieve_entries(data: Json<EntrySearchData>, _protected: ProtectedApiReadScope) -> Result<EntriesResponse, RetrieveEntriesError> {
-    // FIXME: Without this, rustc crashes, lmao??
-    let _a = data.to;
-
-    // TODO: Implement ``from`` and ``to``
     let entries = Entry::load_entries(SAVE_PATH)?;
 
-    Ok(EntriesResponse::from(entries))
+    let from = data.from as usize;
+    let to = {
+        if data.to <= -1 {
+            entries.len()
+        } else {
+            usize::try_from(data.to).unwrap()
+        }
+    };
+
+    Ok(EntriesResponse::from(entries.as_slice()[from..to].to_owned()))
 }
 
 
