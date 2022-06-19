@@ -1,41 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <title>Privalytics</title>
-</head>
-<body>
-    <div class="internal.no-hide m-5">
-        <h1>Privalytics</h1>
-    </div>
-    <div class="internal.top-level" id="result.list">
-        <div class="container-fluid m-5">
-            <h3>Retrieved entries:</h3>
-            <div class="row mt-5">
-                <div id="result.inner.list"></div>
-            </div>
-        </div>
-    </div>
-    <div class="internal.top-level" id="error.invalid-credentials" hidden>
-        <div class="m-5">
-            <h3>Invalid credentials</h3>
-        </div>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privalytics frontend</title>
+    <script type="module" crossorigin src="/gui/assets/index.8c735e85.js"></script>
+    <link rel="stylesheet" href="/gui/assets/index.c807b41a.css">
+  </head>
+  <body>
+    <div id="app"></div>
 
-<script src="gui/scripts/utils.js"></script>
-<script src="gui/scripts/api.js"></script>
-<script src="gui/scripts/loader.js"></script>
-</body>
+  </body>
 </html>
-
-<!--
-Why pure HTML+JS+CSS?
-
-1. With each passing day I hate React more
-2. I'm lazy to setup yew or seed
-3. This _rn_ is quite simple, so no need to do anything fancy
--->
