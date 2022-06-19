@@ -20,8 +20,8 @@
     - [ ] Page
       - [x] Client provided
       - [ ] Server provided
-- [ ] API
-  - [ ] ``/api/submit``
+- [x] API
+  - [x] ``/api/submit``
     - [x] Restriction-less submit
     - [x] JSON response
   - [x] ``/api/retrieve``
