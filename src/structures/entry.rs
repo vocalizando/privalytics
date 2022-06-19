@@ -4,13 +4,13 @@ use bson::{Bson};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde::de::{Error, Visitor};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Entry {
     pub metadata: Metadata,
     pub data: Data,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Metadata {
     pub date: u64,
     pub duid: String,
@@ -20,7 +20,7 @@ pub struct Metadata {
 
 pub type Data = HashMap<String, DataValues>;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum DataValues {
     String(String),
     Number(i64),
