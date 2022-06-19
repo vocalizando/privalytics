@@ -53,6 +53,10 @@ pub fn retrieve_entries(data: Json<EntrySearchData>, _protected: ProtectedApiRea
         }
     };
 
+    if from > to || from > entries.len() || to > entries.len() {
+        return Err(RetrieveEntriesError::InvalidFromOrTo);
+    }
+
     Ok(EntriesResponse::from(entries.as_slice()[from..to].to_owned()))
 }
 

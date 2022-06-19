@@ -23,6 +23,9 @@ _Nothing_
 ### Successful
 _Array of entries_
 
+### ``from`` or ``to`` are invalid
+- id: ``invalid-from-or-to``
+
 ## ``/api/remove``
 ### Successful
 _Nothing_
