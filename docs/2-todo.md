@@ -23,7 +23,6 @@
 - [ ] API
   - [ ] ``/api/submit``
     - [x] Restriction-less submit
-    - [ ] ``client-key``-protected submit
     - [x] JSON response
   - [x] ``/api/retrieve``
     - [x] Retrieve data

@@ -73,20 +73,11 @@ There is one exposed endpoint: ``/api/submit`` that should provide a structure s
     - ``metadata.uid``
 
 ### Abuse prevention
-The endpoint can be _partially_ protected from scrapers, bots or similar technologies:
-- A ``client-key`` can be set on the ``config.toml`` file, this will enable a guard to check the required verification
-data is provided by the client
-  - The client needs to have the ``client-key``
-  - When the client wants to send data, the following steps are also required:
-    - Stringify and minify the analytics data to be sent
-    - HMAC SHA256 the stringified data
-    - The following header will be added to the request: ``Authorization: HMAC-SHA256 ${data}``
-    - The server will run the same steps and check if both results are the same, the data is processed
-- This is useful to prevent _simple and automated_ attacks, however, is someone takes the time to see how the system works,
-it is quite easy to circumvent this protection. Some steps can be taken to prevent this:
-  - Frequent change of the ``client-key``
-    - This could be automated, but be careful to not use an API endpoint to retrieve the ``client-key`` or something like that.
-    Remember: the ``client-key`` should be _constant and static_ on client-side
+The usage of ``allowed_keys`` and ``cors_hostnames`` on the ``Config.toml`` file can help reduce abuse and can make it
+more complicated to craft malicious requests.
+
+But it is still somewhat easy to craft artificial requests and forge a ``Origin`` header. There isn't much that could be
+done to prevent abuse on an open, unauthenticated API.
 
 ## Retrieve and remove analytics data
 There is one endpoint to retrieve: ``/api/retrieve``.
