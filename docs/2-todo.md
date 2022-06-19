@@ -25,10 +25,10 @@
     - [x] Restriction-less submit
     - [ ] ``client-key``-protected submit
     - [x] JSON response
-  - [ ] ``/api/retrieve``
+  - [x] ``/api/retrieve``
     - [x] Retrieve data
-    - [ ] Fine grain control of data received
+    - [x] Fine grain control of data received
     - [x] JSON response
-  - [ ] ``/api/remove``
+  - [x] ``/api/remove``
     - [x] Remove entry from given ``duid``
     - [x] JSON response
