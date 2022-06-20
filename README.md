@@ -5,7 +5,7 @@ Open source, privacy-friendly, blazing fast analytics
 The basic functionality (submit, retrieve and delete) is complete.
 [Some features are missing](docs/2-todo.md).
 
-Check [4-libraries.md](docs/4-libraries.md) to see libraries that wrap the Privalytics API
+Check [4-libraries-and-tools.md](docs/4-libraries-and-tools.md) to see libraries that wrap the Privalytics API
 
 ## Objectives
 - To create a _deploy and forget_ platform
